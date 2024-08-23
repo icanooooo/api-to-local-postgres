@@ -19,6 +19,8 @@ csvheader = ['symbol', 'name', 'price(usd)', 'supply', 'maxSupply']
 
 data = []
 
+print(myjson['data'])
+
 for x in myjson['data']:
     listing = [x['symbol'], x['name'], x['priceUsd'], x['supply'], x['maxSupply']]
     data.append(listing)
