@@ -2,13 +2,13 @@ services:
   pg_crypto:
     image: postgres:15
     ports:
-      - '5434:5432'
+      - '5432:5432'
     networks:
       - eltnetwork
     environment:
       POSTGRES_DB: crypto_db
       POSTGRES_USER: icanooo
-      POSTGRES_PASSWORD: icanacin
+      POSTGRES_PASSWORD: rahasia
 
   python_script:
     build:

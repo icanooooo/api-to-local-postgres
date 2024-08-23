@@ -1,5 +1,6 @@
 import requests
 import psycopg2
+import time
 
 def fetch_data(url):
     headers = {
@@ -16,6 +17,27 @@ def fetch_data(url):
 
     return myjson
 
+def connect_to_db(max_retries=5, delay=10):
+    tries = 0
+    
+    while tries < max_retries:
+        try:    
+            connection = psycopg2.connect(
+                    host="pg_crypto",
+                    database="crypto_db",
+                    user="icanooo",
+                    password="rahasia"
+            )
+            print("CONNECTED !!!")
+            return connection
+        except:
+            tries += 1
+            print('retrying....')
+            time.delay(10)
+
+    print("Failure to connect :(")
+    
+
 def insert_data(connection, data):
     cursor = connection.cursor()
 
@@ -27,14 +49,14 @@ def insert_data(connection, data):
         priceUsd DOUBLE PRECISION,
         supply FLOAT,
         maxSupply FLOAT
-    )
+    );
     '''
 
     cursor.execute(create_table)
     
     insert_query = '''
     INSERT INTO (id, symbol, name, price(usd), supply, maxSupply)
-    values (%s, %s, %s, %s, %s)
+    values (%s, %s, %s, %s, %s);
     '''
 
     for item in data['data']:
@@ -55,10 +77,9 @@ def main():
             password="rahasia"
         )
 
+        connection = connect_to_db
         insert_data(connection, data)
         connection.close()
-
-    print(data[1])
 
 if __name__ == "__main__":
     main()
