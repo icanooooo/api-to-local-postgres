@@ -6,11 +6,11 @@ services:
     networks:
       - eltnetwork
     environment:
-      - POSTGRES_DB: crypto_db
-      - POSTGRES_USER: icanooo
-      - POSTGRES_PASSWORD: icanacin
+      POSTGRES_DB: crypto_db
+      POSTGRES_USER: icanooo
+      POSTGRES_PASSWORD: icanacin
 
-  script:
+  python_script:
     build:
       context: ./elt
       dockerfile: Dockerfile
@@ -21,5 +21,5 @@ services:
       - pg_crypto
 
 networks:
-  elt_network:
+  eltnetwork:
     driver: bridge
