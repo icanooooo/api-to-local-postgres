@@ -55,14 +55,14 @@ def insert_data(connection, data):
 
         cursor.execute(create_table)
         
-        insert_query = '''
-        INSERT INTO (id, symbol, name, price(usd), supply, maxSupply)
-        values (%s, %s, %s, %s, %s);
-        '''
+        # insert_query = '''
+        # INSERT INTO (id, symbol, name, price(usd), supply, maxSupply)
+        # values (%s, %s, %s, %s, %s);
+        # '''
 
-        for item in data['data']:
-            cursor.execute(insert_query, (item['id'], item['symbol'], item['name'], item['priceUsd'],
-                                          item['supply'], item['maxSupply'],))
+        # for item in data['data']:
+        #     cursor.execute(insert_query, (item['id'], item['symbol'], item['name'], item['priceUsd'],
+        #                                   item['supply'], item['maxSupply'],))
         connection.commit()
         cursor.close()
         connection.close()

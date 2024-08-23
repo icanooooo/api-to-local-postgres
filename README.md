@@ -12,4 +12,6 @@ Current Progress:
 Next:
 - inserting data function type error, wml!
 
+** english is not my first language, even in my own language I have trouble with words lol
+
 Thank you.
