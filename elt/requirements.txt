@@ -1,1 +1,2 @@
 requests==2.31.0
+pyscopgg2-binary==2.9.7

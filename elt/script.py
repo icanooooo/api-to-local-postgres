@@ -1,31 +1,22 @@
 import requests
-import csv
+import pyscopg2
 
-url = 'https://api.coincap.io/v2/assets'
+def fetch_data(url):
+    headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    response = requests.request("GET", url, headers=headers, data=())
 
-headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-}
-response = requests.request("GET", url, headers=headers, data=())
+    if response.status_code == 200:
+        print('Sucessfully Connected')
+        myjson = response.json()
+    else:
+        print(f"failed to get response: {response.status_code}")
 
-if response.status_code == 200:
-    print('Sucessfully Connected')
-    myjson = response.json()
-else:
-    print(f"failed to get response: {response.status_code}")
+def main():
+    api_url = 'https://api.coincap.io/v2/assets'
+    fetch_data(api_url)
 
-csvheader = ['symbol', 'name', 'price(usd)', 'supply', 'maxSupply']
-
-data = []
-
-for x in myjson['data']:
-    listing = [x['symbol'], x['name'], x['priceUsd'], x['supply'], x['maxSupply']]
-    data.append(listing)
-
-with open('crypto.csv', 'w', encoding='UTF8', newline='') as f:
-    writer = csv.writer(f)
-
-    writer.writerow(csvheader)
-    writer.writerows(data)
-
+if __name__ == "__main__":
+    main()
