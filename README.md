@@ -7,10 +7,10 @@ Example, with the api we currently getting we could create a daily crypto price 
 Current Progress:
 - Adding docker-compose.yaml
 - added dockerfile
-- finished up python script (having trouble inserting data, connected to api and database ok!)
+- Succesfully ingest data from csv and inserted into postgresql
 
 Next:
-- inserting data function type error, wml!
+- add volume and try to have a cron job (maybe with airflow, idk)
 
 ** english is not my first language, even in my own language I have trouble with words lol
 
