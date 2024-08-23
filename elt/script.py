@@ -47,22 +47,30 @@ def insert_data(connection, data):
             id SERIAL PRIMARY KEY,
             symbol VARCHAR(50),
             name VARCHAR(50),
-            priceUsd DOUBLE PRECISION,
+            price_in_usd DOUBLE PRECISION,
             supply FLOAT,
-            maxSupply FLOAT
+            max_supply FLOAT
         );
         '''
 
         cursor.execute(create_table)
-        
-        # insert_query = '''
-        # INSERT INTO (id, symbol, name, price(usd), supply, maxSupply)
-        # values (%s, %s, %s, %s, %s);
-        # '''
 
-        # for item in data['data']:
-        #     cursor.execute(insert_query, (item['id'], item['symbol'], item['name'], item['priceUsd'],
-        #                                   item['supply'], item['maxSupply'],))
+        print("Table created <3")
+        
+        insert_query = '''
+        INSERT INTO crypto_table (symbol, name, price_in_usd, supply, max_supply)
+        values (%s, %s, %s, %s, %s);
+        '''
+
+        for item in data:
+            cursor.execute(insert_query, (item['symbol'], item['name'], 
+                                          float(item['priceUsd']) if item['priceUsd'] else None,
+                                          float(item['supply']) if item['supply'] else None,
+                                          float(item['maxSupply']) if item['maxSupply'] else None
+                                          )
+                                        )
+            print(f"inserting {item['name']}")
+
         connection.commit()
         cursor.close()
         connection.close()
@@ -74,7 +82,8 @@ def insert_data(connection, data):
 
 def main():
     api_url = 'https://api.coincap.io/v2/assets'
-    data = fetch_data(api_url)
+    alpha = fetch_data(api_url)
+    data = alpha['data']
 
     if data:
         connect = connect_to_db()
