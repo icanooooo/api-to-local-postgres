@@ -8,7 +8,13 @@ headers = {
     'Content-Type': 'application/json'
 }
 response = requests.request("GET", url, headers=headers, data=())
-myjson = response.json()
+
+if response.status_code == 200:
+    print('Sucessfully Connected')
+    myjson = response.json()
+else:
+    print(f"failed to get response: {response.status_code}")
+
 csvheader = ['symbol', 'name', 'price(usd)', 'supply', 'maxSupply']
 
 data = []
