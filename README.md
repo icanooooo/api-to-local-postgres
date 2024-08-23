@@ -7,8 +7,9 @@ Example, with the api we currently getting we could create a daily crypto price 
 Current Progress:
 - Adding docker-compose.yaml
 - added dockerfile
+- finished up python script (having trouble inserting data, connected to api and database ok!)
 
 Next:
-- Create python script to ingest crypto api to postgres container
+- inserting data function type error, wml!
 
 Thank you.
