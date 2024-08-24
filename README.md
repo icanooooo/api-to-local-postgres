@@ -8,9 +8,11 @@ Current Progress:
 - Adding docker-compose.yaml
 - added dockerfile
 - Succesfully ingest data from csv and inserted into postgresql
+- Successfully create volumes with docker (but when composed down data does not persist(?), only when container exited)
 
 Next:
-- add volume and try to have a cron job (maybe with airflow, idk)
+- add a cron job (maybe with airflow, idk)
+- check if volumes can persist after compose down(?)
 
 ** english is not my first language, even in my own language I have trouble with words lol
 

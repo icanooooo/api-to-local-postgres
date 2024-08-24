@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: crypto_db
       POSTGRES_USER: icanooo
       POSTGRES_PASSWORD: rahasia
+    volumes:
+      - pgdata:/var/lin/postgresql/data
 
   python_script:
     build:
@@ -23,3 +25,6 @@ services:
 networks:
   eltnetwork:
     driver: bridge
+
+volumes:
+  pgdata:
