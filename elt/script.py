@@ -1,6 +1,7 @@
 import requests
 import psycopg2
 import time
+import datetime
 
 # Function for fetching Data from API
 def fetch_data(url):
@@ -52,7 +53,8 @@ def insert_data(connection, data):
             name VARCHAR(50),
             price_in_usd DOUBLE PRECISION,
             supply FLOAT,
-            max_supply FLOAT
+            max_supply FLOAT,
+            insert_date TIMESTAMP
         );
         '''
         cursor.execute(create_table)
@@ -60,15 +62,16 @@ def insert_data(connection, data):
         
         # To insert data from json format
         insert_query = '''
-        INSERT INTO crypto_table (symbol, name, price_in_usd, supply, max_supply)
-        values (%s, %s, %s, %s, %s);
+        INSERT INTO crypto_table (symbol, name, price_in_usd, supply, max_supply, insert_date)
+        values (%s, %s, %s, %s, %s, %s);
         '''
 
         for item in data:
             cursor.execute(insert_query, (item['symbol'], item['name'], 
                                           float(item['priceUsd']) if item['priceUsd'] else None,
                                           float(item['supply']) if item['supply'] else None,
-                                          float(item['maxSupply']) if item['maxSupply'] else None
+                                          float(item['maxSupply']) if item['maxSupply'] else None,
+                                          datetime.datetime.now()
                                           )
                                         )
             print(f"inserting {item['name']}")
