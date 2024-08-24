@@ -7,7 +7,7 @@ Example, with the api we currently getting we could create a daily crypto price 
 Current Progress:
 - Adding docker-compose.yaml
 - added dockerfile
-- Succesfully ingest data from csv and inserted into postgresql
+- Succesfully ingest data from api and inserted into postgresql
 - Successfully create volumes with docker (but when composed down data does not persist(?), only when container exited)
 
 Next:
