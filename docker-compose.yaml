@@ -22,6 +22,18 @@ services:
     depends_on:
       - pg_crypto
 
+  airflow_script:
+    image: apache/airflow:latest
+    depends_on:
+      - pg_crypto
+    networks:
+      - eltnetwork
+    environment:
+      - AIRFLOW__DATABASE_SQL_ALCHEMY_CONN=postgrsql+psycopg2://airflow:airflow@postgres/airflow
+    command: >
+      bash -c "airflow db init &&
+              airflow users create --username icanooo --password rahasia --firstname Muhammad --lastname ihsan --role Admin --email muhihsan0@outlook.com"
+
 networks:
   eltnetwork:
     driver: bridge
