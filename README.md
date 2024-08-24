@@ -11,6 +11,7 @@ Current Progress:
 - Successfully create volumes with docker (but when composed down data does not persist(?), only when container exited)
 
 Next:
+- insert date into table
 - add a cron job (maybe with airflow, idk)
 - check if volumes can persist after compose down(?)
 
