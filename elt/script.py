@@ -2,27 +2,29 @@ import requests
 import psycopg2
 import time
 
+# Function for fetching Data from API
 def fetch_data(url):
     headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-    }
+    } # ?
     response = requests.request("GET", url, headers=headers, data=())
 
-    if response.status_code == 200:
+    if response.status_code == 200: # if Connection succedd
         print('Sucessfully Connected to API')
         myjson = response.json()
-    else:
+    else: # if response other than '200' (failed)
         print(f"failed to get response: {response.status_code}")
 
     return myjson
 
-def connect_to_db(max_retries=5, delay=10):
+# Function to connect to db
+def connect_to_db(max_retries=5, delay=10): 
     tries = 0
     
     while tries < max_retries:
         try:    
-            connection = psycopg2.connect(
+            connection = psycopg2.connect( #through this command
                     host="pg_crypto",
                     database="crypto_db",
                     user="icanooo",
@@ -37,11 +39,12 @@ def connect_to_db(max_retries=5, delay=10):
 
     print("Failure to connect :(")
     
-
+# Function to insert data to postgresdb
 def insert_data(connection, data):
     try:
-        cursor = connection.cursor()
+        cursor = connection.cursor() # Creating cursor(?)
 
+        # to check if table exist in database
         create_table = '''
         CREATE TABLE IF NOT EXISTS crypto_table (
             id SERIAL PRIMARY KEY,
@@ -52,11 +55,10 @@ def insert_data(connection, data):
             max_supply FLOAT
         );
         '''
-
         cursor.execute(create_table)
-
         print("Table created <3")
         
+        # To insert data from json format
         insert_query = '''
         INSERT INTO crypto_table (symbol, name, price_in_usd, supply, max_supply)
         values (%s, %s, %s, %s, %s);
