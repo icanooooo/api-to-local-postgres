@@ -10,9 +10,9 @@ Current Progress:
 - Succesfully ingest data from api and inserted into postgresql
 - Successfully create volumes with docker (but when composed down data does not persist(?), only when container exited)
 
-Next:
-- add a cron job (maybe with airflow, idk)
-- check if volumes can persist after compose down(?)
+Status:
+- Currently looking into airflow.
+- May add a cron job to this project or branch, we'll see
 
 ** english is not my first language, even in my own language I have trouble with words lol
 
