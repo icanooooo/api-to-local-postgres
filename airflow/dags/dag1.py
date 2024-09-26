@@ -1,6 +1,6 @@
 from airflow import DAG
 from datetime import datetime
-from airflow.opertators.python import PythonOperator
+from airflow.operators.python import PythonOperator
 
 def my_task():
     print("hi this is a task")
