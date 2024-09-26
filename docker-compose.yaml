@@ -1,30 +1,95 @@
 services:
-  pg_crypto:
-    image: postgres:15
+  destination_pgres:
+    image: postgres:latest
     ports:
-      - '5432:5432'
+      - "5434:5432"
     networks:
-      - eltnetwork
+      - elt_network
     environment:
-      POSTGRES_DB: crypto_db
+      POSTGRES_DB: destination_db
       POSTGRES_USER: icanooo
-      POSTGRES_PASSWORD: rahasia
+      POSTGRES_PASSWORD: secret
     volumes:
-      - pgdata:/var/lin/postgresql/data
-
-  python_script:
-    build:
-      context: ./elt
-      dockerfile: Dockerfile
-    command: ["python", "script.py"]
+      - destination_db_data:/var/lib/postgresql/data
+  
+  postgres:
+    image: postgres:latest
     networks:
-      - eltnetwork
+      - elt_network
+    environment:
+      - POSTGRES_USER=icanooo
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+
+  init-airflow:
+    image: apache/airflow:latest
     depends_on:
-      - pg_crypto
+      - postgres
+    networks:
+      - elt_network
+    environment:
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://icanooo:airflow@postgres/airflow
+    command: >
+      bash -c "airflow db init &&
+                airflow users create --username icanooo --password rahasia --firstname Muhammad --lastname Ihsan --role Admin --email muhihsan0@outlook.com"
+  
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: root
+    depends_on:
+      - postgres
+    networks:
+      - elt_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - LOAD_EX=networks
+      - EXECUTOR=Local
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://icanooo:airflow@postgres/airflow
+      - AIRFLOW_CONN_DESTINATION_POSTGRES=postgres://icanooo:secret@destination_pgres:5434/destination_db
+      - AIRFLOW__CORE__FERNET_KEY=plIipb9RU3-3wJ1UNaAtqVNJrqFEks1-dGbJM34EW7U=
+      - AIRFLOW__WEBSERVER__DEFAULT_USER_USERNAME=icanooo
+      - AIRFLOW__WEBSERVER_DEFAULT_USER_PASSWORD=rahasia
+      - AIRFLOW_WWW_USER_USERNAME=icanooo
+      - AIRFLOW_WWW_USER_PASSWORD=rahasia
+      - AIRFLOW__WEBSERVER__SECRET_KEY=secret
+    ports:
+      - "8080:8080"
+    command: webserver
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: root
+    depends_on:
+      - postgres
+    networks:
+      - elt_network
+    extra_hosts:
+      - "host.docker.interal:host-gateway"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - LOAD_EX=networks
+      - EXECUTOR=Local
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://icanooo:airflow@postgres/airflow
+      - AIRFLOW_CONN_DESTINATION_POSTGRES=postgres://icanooo:secret@destination_pgres:5434/destination_db
+      - AIRFLOW__CORE__FERNET_KEY=plIipb9RU3-3wJ1UNaAtqVNJrqFEks1-dGbJM34EW7U=
+      - AIRFLOW_WWW_USER_USERNAME=icanooo
+      - AIRFLOW_WWW_USER_PASSWORD=rahasia
+      - AIRFLOW__WEBSERVER__SECRET_KEY=secret
+    command: scheduler
 
 networks:
-  eltnetwork:
+  elt_network:
     driver: bridge
-
+  
 volumes:
-  pgdata:
+  destination_db_data:
