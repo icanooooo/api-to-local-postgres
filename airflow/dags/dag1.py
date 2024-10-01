@@ -2,9 +2,10 @@ from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonOperator
 import subprocess
+import os
 
 def getData():
-    script_path = "../elt/script.py"
+    script_path = "/opt/airflow/elt/script.py"
     result = subprocess.run(["python", script_path],
                             capture_output=True,
                             text=True)

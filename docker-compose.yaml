@@ -46,7 +46,8 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./var/run/docker.sock:/var/run/docker.sock
+      - ./elt:/opt/airflow/elt
     environment:
       - LOAD_EX=networks
       - EXECUTOR=Local
@@ -75,7 +76,8 @@ services:
       - "host.docker.interal:host-gateway"
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./var/run/docker.sock:/var/run/docker.sock
+      - ./elt:/opt/airflow/elt
     environment:
       - LOAD_EX=networks
       - EXECUTOR=Local
