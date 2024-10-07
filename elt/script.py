@@ -26,17 +26,17 @@ def connect_to_db(max_retries=5, delay=10):
     while tries < max_retries:
         try:    
             connection = psycopg2.connect( #through this command
-                    host="pg_crypto",
-                    database="crypto_db",
+                    host="destination_pgres",
+                    database="destination_db",
                     user="icanooo",
-                    password="rahasia"
+                    password="secret"
             )
             print("CONNECTED to database!!!")
             return connection
         except:
             tries += 1
             print('retrying....')
-            time.sleep(10)
+            time.sleep(15)
 
     print("Failure to connect :(")
     
