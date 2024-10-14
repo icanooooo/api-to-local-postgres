@@ -25,11 +25,11 @@ def fetch_api():
         raise Exception(f"womp,womp: {response.status_code}")
 
 def load_to_db(**kwargs):
-    max_retries=5
-    delay=10
+
+    # Connecting to DB
     tries=0
 
-    while tries < max_retries:
+    while tries < 5:
         try:
             connection = psycopg2.connect(
                 host="destination_pgres",
@@ -44,9 +44,9 @@ def load_to_db(**kwargs):
             print('retrying..')
             time.sleep(15)
 
-    try:
-        ti = kwargs['ti']
 
+    # Inserting data from API to DB
+    try:
         cursor = connection.cursor()
 
         create_table = '''
@@ -67,6 +67,9 @@ def load_to_db(**kwargs):
         INSERT INTO crypto_table (symbol, name, price_in_usd, supply, max_supply, insert_date)
         values (%s, %s, %s, %s, %s, %s);
         '''
+
+        # Using kwargs
+        ti = kwargs['ti']
 
         api_pull = ti.xcom_pull(task_ids='ingest_api')
         data = api_pull['data']
